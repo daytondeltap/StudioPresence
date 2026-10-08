@@ -2,6 +2,10 @@
 
 Reviewed fork: daytondeltap/StudioPresence. Starting commit: `0aaf5a943dbbdb416d1e2a72c3b345a6c119daba`.
 
+## Standalone plugin addition
+
+The new `src/standalone` variant replaces the local companion with Discord HTTPS OAuth and presence requests. Its different credential and privacy boundaries, installation instructions, tests and live-verification limits are documented in [STANDALONE.md](STANDALONE.md). It introduces no additional runtime package dependencies. Remembering OAuth credentials is off by default; optional saved tokens are not encrypted by this plugin. Discord's presence scope also grants friends-list access, although this plugin does not query friends. Direct presence access depends on the user's Discord application having Social SDK access. The companion-specific findings below still apply to the older companion variant.
+
 ## Result and scope
 
 Manual inspection of every tracked application source file, startup script, package configuration, dependency lockfile and workflow found no evidence of a virus, credential theft, remote command execution, concealed downloader or unauthorized automatic persistence in the reviewed application code. This is a source review and dependency advisory check, not an antivirus certification. The fork had no published releases at review time.

@@ -277,3 +277,6 @@ $RECYCLE.BIN/
 release/
 .vscode/settings.json
 .claude/settings.json
+
+# Generated standalone Studio test fixture
+tests/standalone/.generated-studio-test.luau

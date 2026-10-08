@@ -72,10 +72,25 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           allow-external-github-orgs: true
+      - name: Setup NodeJS for plugin tests
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
+      - name: Test standalone plugin
+        run: |
+          curl -fsSL https://github.com/luau-lang/luau/releases/download/0.741/luau-ubuntu.zip -o luau.zip
+          sha256sum --check <<'CHECKSUM'
+          134dc762ad26232af83e43f98dec03ff6030dd3a4452f9408b9d50ccea025503  luau.zip
+          CHECKSUM
+          unzip -q luau.zip -d luau-bin
+          chmod +x luau-bin/luau luau-bin/luau-compile
+          ./luau-bin/luau-compile src/standalone/*.luau > /dev/null
+          node scripts/test-standalone.cjs "$PWD/luau-bin/luau"
       - name: Package Client
         run: |
           mkdir -p release
           rojo build -o release/studiopresence.rbxm
+          rojo build standalone.project.json -o release/StudioPresence-Standalone-1.0.0.rbxm
           sha256sum release/studiopresence.rbxm > release/SHA256SUMS.txt
       - name: Upload plugin
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -85,3 +100,9 @@ jobs:
           path: |
             release/studiopresence*.rbxm
             release/SHA256SUMS.txt
+      - name: Upload standalone plugin
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: StudioPresence-Standalone
+          if-no-files-found: error
+          path: release/StudioPresence-Standalone-*.rbxm

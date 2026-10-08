@@ -3,6 +3,14 @@
 A plugin to connect your Studio with Discord!  
 Heavily inspired by [DRPC by RigidStudios](https://devforum.roblox.com/t/1086405)
 
+## Standalone Studio plugin (no companion software)
+
+Install **StudioPresence-Standalone-1.0.0.rbxm** in Studio's local Plugins folder, restart Studio, and open **Plugins → StudioPresence → Presence**. Create your own Discord application, enable **OAuth2 → Public Client**, enter its Application ID and sign in through Discord's website. Your application must have Social SDK presence access. See [STANDALONE.md](STANDALONE.md) for complete setup and limitations.
+
+The standalone plugin sends presence directly to Discord over HTTPS. It needs no EXE, Node installation, local server, or third-party login service. It retains developing/testing/animating activity, place/script details, cursor/line counts, artwork and elapsed time, and adds pause/disconnect controls. Remembering credentials is optional and off by default.
+
+The workflow publishes it as **StudioPresence-Standalone**. The older companion-based version remains available below; its installation instructions do not apply to the standalone plugin.
+
 # Examples
 
 <img width="335" height="638" alt="examples" src="https://github.com/user-attachments/assets/e232ba09-89f8-4e0d-94c0-02ea84607d23" />

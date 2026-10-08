@@ -35,7 +35,9 @@
     "package": "npm run package:server && npm run build:client",
     "package:vbs": "node scripts/files.cjs copy-vbs",
     "typecheck": "tsc --noEmit",
-    "test": "npm run build:server && node --test tests/*.test.cjs"
+    "test": "npm run build:server && node --test tests/*.test.cjs",
+    "build:standalone": "rojo build standalone.project.json -o release/StudioPresence-Standalone-1.0.0.rbxm",
+    "test:standalone": "node scripts/test-standalone.cjs"
   },
   "version": "3.0.7",
   "engines": {

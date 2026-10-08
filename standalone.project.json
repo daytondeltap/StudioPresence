@@ -1,0 +1,4 @@
+{
+  "name": "StudioPresenceStandalone",
+  "tree": { "$className": "Folder", "$path": "src/standalone" }
+}
