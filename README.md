@@ -1,4 +1,4 @@
-# StudioPresence v3.0.6
+# StudioPresence v3.0.7 (security-reviewed fork)
 
 A plugin to connect your Studio with Discord!  
 Heavily inspired by [DRPC by RigidStudios](https://devforum.roblox.com/t/1086405)
@@ -10,15 +10,15 @@ Heavily inspired by [DRPC by RigidStudios](https://devforum.roblox.com/t/1086405
 
 # Installation
 
-• Download [Server Here](https://github.com/iArxic/StudioPresence/releases/tag/v3.0.6) and [Roblox Plugin Here](https://www.roblox.com/library/11213975679/StudioPresence)  
-• Next, extract the already installed [Server](https://github.com/iArxic/StudioPresence/releases/tag/v3.0.6) to a new folder (Inside desktop recommended).  
-• Run it!
+• Open the latest successful [Package run in this fork](https://github.com/daytondeltap/StudioPresence/actions/workflows/package.yml). Download the server artifact for your operating system and **StudioPresence-Plugin** from that same run.
+• Extract the server archive, and install `studiopresence.rbxm` as a local Roblox Studio plugin. The companion plugin from this fork uses the hardened loopback endpoint.
+• Open Discord, then run the server. Rebuilds do not modify upstream releases or the Roblox marketplace plugin.
 
 *Additional steps for **MacOS** users*
 1. Download the Mac server
 2. Extract it using the archive utility from the App Store
 3. [Open your terminal](https://support.apple.com/guide/terminal/open-or-quit-terminal-apd5265185d-f365-44cb-8b09-71a064a42125) and type `chmod u+x ` and then drag the server file into your terminal, press enter and it will turn the server into an executable file.
-4. Open the executable file! (If it cannot verify for malware go to settings > Privacy and Security, scroll down until you find the warning, and press open anyway)
+4. Open the executable file. Builds are not Apple-notarized; if macOS blocks it, verify its source and checksum before deciding whether to allow it.
 
 *Additional optional steps for **Windows** users for automatic boot, not required.*
 1. Locate the `startup.vbs` file
@@ -30,7 +30,7 @@ Heavily inspired by [DRPC by RigidStudios](https://devforum.roblox.com/t/1086405
 This will automatically start the server without opening a command window
 
 
-You might have an issue with the antivirus incorrectly flagging it as a virus, click "keep" and if needed exclude the file from your antivirus.
+If antivirus flags a download, keep it quarantined and investigate the exact detection. This review does not establish that every executable is safe. Do not disable antivirus or add blanket exclusions. See [SECURITY.md](SECURITY.md) for findings, build instructions and review limits.
 
 _Note: The cmd window needs to be open in order for the plugin to work!_
 

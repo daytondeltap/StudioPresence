@@ -1,82 +1,87 @@
 name: Package
 
-on: push
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
 
 jobs:
   server:
     name: StudioPresence App
     runs-on: ubuntu-latest
-
+    timeout-minutes: 20
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup NodeJS
-        uses: actions/setup-node@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          node-version: 18
-
+          persist-credentials: false
+      - name: Setup NodeJS
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 24
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
         with:
           version: 9.10.0
-
-      - name: Install and Package Server
+      - name: Install, audit, test and package server
         run: |
-          pnpm install --frozen-lockfile
+          pnpm install --frozen-lockfile --ignore-scripts
+          pnpm audit
+          pnpm typecheck
+          pnpm test
           pnpm run package:server
-
+          STUDIOPRESENCE_TEST_BINARY="$PWD/release/studiopresence-linux" node --test tests/app.test.cjs
       - name: Windows Release
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: StudioPresence-Windows
+          if-no-files-found: error
           path: |
             release/studiopresence-win*.exe
             release/startup.vbs
-
+            release/SHA256SUMS.txt
       - name: MacOS Release
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: StudioPresence-macOS
-          path: release/studiopresence-macos*
-
+          if-no-files-found: error
+          path: |
+            release/studiopresence-macos*
+            release/SHA256SUMS.txt
       - name: Linux Release
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: StudioPresence-Linux
-          path: release/studiopresence-linux*
-
+          if-no-files-found: error
+          path: |
+            release/studiopresence-linux*
+            release/SHA256SUMS.txt
   client:
     name: StudioPresence Plugin
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Setup NodeJS
-        uses: actions/setup-node@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
-          node-version: 18
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.10.0
-
+          persist-credentials: false
       - name: Setup Foreman
-        uses: Roblox/setup-foreman@v3
+        uses: Roblox/setup-foreman@f286ddc9f1b667c28afef682b1540f75b25698f5 # v3
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           allow-external-github-orgs: true
-
-      - name: Install and Package Client
+      - name: Package Client
         run: |
-          mkdir release
-          pnpm install --frozen-lockfile
-          pnpm build:client
-
+          mkdir -p release
+          rojo build -o release/studiopresence.rbxm
+          sha256sum release/studiopresence.rbxm > release/SHA256SUMS.txt
       - name: Upload plugin
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: StudioPresence-Plugin
-          path: release/studiopresence*.rbxm
+          if-no-files-found: error
+          path: |
+            release/studiopresence*.rbxm
+            release/SHA256SUMS.txt

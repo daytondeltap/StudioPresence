@@ -22,7 +22,7 @@ local function start()
 	local Data = require(StudioPresence.src.dataHandler)
 	local Client = require(StudioPresence.src.client.index)
 
-	local Http = require(StudioPresence.src.httpClient).new("http://localhost:4455/")
+	local Http = require(StudioPresence.src.httpClient).new("http://127.0.0.1:4455/")
 	local ClientObj = Client.new(Http, false)
 
 	Data:AttachChange("Enabled", function(isEnabled)

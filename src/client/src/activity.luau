@@ -1,5 +1,14 @@
 local activity = {}
 
+local function displayText(value)
+	if type(value) ~= "string" then
+		return value
+	end
+	value = value:gsub("[%c]", " ")
+	-- Keep Unicode intact and stay within the bridge/Discord text limit.
+	return value:sub(1, (utf8.offset(value, 129) or (#value + 1)) - 1)
+end
+
 function activity.new()
 	return setmetatable({ assets = {} }, { __index = activity })
 end
@@ -25,13 +34,13 @@ function activity:addButton(buttonName, buttonValue)
 end
 
 function activity:setDescription(detailsValue)
-	self.details = detailsValue
+	self.details = displayText(detailsValue)
 
 	return self
 end
 
 function activity:setState(stateValue)
-	self.state = stateValue
+	self.state = displayText(stateValue)
 
 	return self
 end
@@ -53,7 +62,7 @@ function activity:setImage(imageName, text)
 	end
 
 	self.assets.large_image = imageName
-	self.assets.large_text = text
+	self.assets.large_text = displayText(text)
 	return self
 end
 
@@ -63,7 +72,7 @@ function activity:setThumbnail(imageName, text)
 	end
 
 	self.assets.small_image = imageName
-	self.assets.small_image_key = text
+	self.assets.small_text = displayText(text)
 
 	return self
 end

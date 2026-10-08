@@ -2,18 +2,16 @@
   "author": "iArxic",
   "bin": "dist/server/index.js",
   "dependencies": {
-    "chalk": "^5.3.0",
-    "discord-rpc": "^4.0.1"
+    "chalk": "5.3.0",
+    "discord-rpc": "4.0.1"
   },
   "description": "Connect your Studio with Discord!",
   "devDependencies": {
     "@types/discord-rpc": "^4.0.8",
     "@types/node": "18.19.50",
-    "@vercel/ncc": "^0.38.1",
-    "copy-file-util": "^1.2.1",
-    "pkg": "^5.8.0",
-    "rimraf": "^5.0.0",
-    "typescript": "5.6.2"
+    "@vercel/ncc": "0.38.4",
+    "typescript": "5.6.2",
+    "@yao-pkg/pkg": "6.23.0"
   },
   "license": "ISC",
   "main": "dist/server/index.js",
@@ -21,21 +19,34 @@
   "pkg": {
     "scripts": "dist/server/**/*.js",
     "targets": [
-      "node18-win-x64",
-      "node18-macos-x64",
-      "node18-linux-x64"
+      "node24-win-x64",
+      "node24-macos-x64",
+      "node24-linux-x64"
     ],
     "outputPath": "release"
   },
   "private": true,
-  "repository": "github:iArxic/StudioPresence",
+  "repository": "github:daytondeltap/StudioPresence",
   "scripts": {
-    "build:server": "rimraf dist/server && ncc build src/server/index.ts -o dist/server",
+    "build:server": "node scripts/files.cjs clean-server && ncc build src/server/index.ts -o dist/server",
     "dev:server": "ncc build src/server/index.ts -o dist/server -w",
-    "package:server": "rimraf release && npm run build:server && pkg . && npm run package:vbs",
+    "package:server": "node scripts/files.cjs clean-release && npm run build:server && pkg . --no-bytecode --public --no-native-build && npm run package:vbs && node scripts/checksums.cjs",
     "build:client": "rojo build -o release/studiopresence.rbxm",
     "package": "npm run package:server && npm run build:client",
-    "package:vbs": "copy-file-util src/server/startup.vbs --folder release"
+    "package:vbs": "node scripts/files.cjs copy-vbs",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build:server && node --test tests/*.test.cjs"
   },
-  "version": "3.0.0"
+  "version": "3.0.7",
+  "engines": {
+    "node": ">=24 <25"
+  },
+  "packageManager": "pnpm@9.10.0",
+  "pnpm": {
+    "overrides": {
+      "discord-rpc>ws": "7.5.11",
+      "discord-rpc>register-scheme": "-",
+      "prebuild-install>tar-fs": "2.1.4"
+    }
+  }
 }
